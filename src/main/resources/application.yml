@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /eventapp-service
+
+spring:
+  application:
+    name: eventapp
+  jpa:
+    show-sql: true
+  main:
+    banner-mode: off
+  datasource:
+#    username: root
+#    password: Anhtuan@040403
+    password: hung0509
+    url: jdbc:mysql://localhost:3306/db_eventapp
+    username: hung0509
+
+jwt:
+  secretKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
+  valid-duration: 36000
+  refreshable-duration: 72000 # in seconds
