@@ -22,7 +22,7 @@ public class EventResDto {
     Date createAt;
     String imageUrl;
     String bannerUrl;
-    String locataion;
+    String location;
     String comment;
     String status;
     String facultyName;

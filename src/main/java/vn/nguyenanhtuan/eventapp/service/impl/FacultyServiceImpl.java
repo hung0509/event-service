@@ -1,5 +1,6 @@
 package vn.nguyenanhtuan.eventapp.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,10 +24,11 @@ public class FacultyServiceImpl implements FacultyService {
     FacultyMapper facultyMapper;
 
     @Override
+    @Transactional
     public FacultyResDto save(FacultyReqDto req) {
         Faculty faculty = facultyMapper.toFaculty(req);
-
-        return facultyMapper.toFacultyResDto(facultyRepository.save(faculty));
+        faculty = facultyRepository.save(faculty);
+        return facultyMapper.toFacultyResDto(faculty);
     }
 
     @Override

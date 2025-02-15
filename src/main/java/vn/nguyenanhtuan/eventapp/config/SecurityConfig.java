@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class SecurityConfig {
     private final String[] URL_PUBLIC = {
             "/auth", "/auth/login", "/auth/refresh", "/auth/logout", "/auth/introspect",
-            "/users", "auth/outbound/authentication"
+            "/users", "auth/outbound/authentication", "roles"
     };
 
     @Bean

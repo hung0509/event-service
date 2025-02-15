@@ -29,8 +29,8 @@ public class EventController {
                 .build();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<EventResDto> getEvent(@PathVariable int id) {
+    @GetMapping("/id/{id}")
+    public ApiResponse<EventResDto> getId(@PathVariable int id) {
         log.info("*Log table event. get event by id in db*");
         return ApiResponse.<EventResDto>builder()
                 .result(eventService.getById(id))

@@ -24,6 +24,9 @@ public class Event {
     @Column(name ="title", precision = 100)
     String title;
 
+    @Column(name = "description")
+    String description;
+
     @Column(name ="startDate")
     Date startDate;
 
@@ -64,7 +67,7 @@ public class Event {
     List<User> users;
 
     @ManyToOne
-    @JoinColumn(name = "faculty")
+    @JoinColumn(name = "faculty_id")
     @JsonBackReference
     Faculty faculty;
 }

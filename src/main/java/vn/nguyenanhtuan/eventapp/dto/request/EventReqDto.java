@@ -20,7 +20,7 @@ public class EventReqDto {
     Date createAt;
     String imageUrl;
     String bannerUrl;
-    String locataion;
+    String location;
     String comment;
     String status;
     int facultyId;

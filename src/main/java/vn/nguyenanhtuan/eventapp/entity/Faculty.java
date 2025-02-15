@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Entity
-@Table(name="event")
+@Table(name="faculty")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
