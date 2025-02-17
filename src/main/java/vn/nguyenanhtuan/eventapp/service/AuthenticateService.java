@@ -46,10 +46,6 @@ public class AuthenticateService {
     @Value("${jwt.valid-duration}")
     private long VALID_DURATION;
 
-    @NonFinal
-    @Value("${jwt.refreshable-duration}")
-    private long REFRESHABLE_DURATION;
-
     public AuthenticateResponse authenticate(AuthenticateRequest request) {
         var user = userRepository.findByEmail(request.getEmail());
 
@@ -72,7 +68,7 @@ public class AuthenticateService {
         boolean isCheck = true;
 
         try {
-            verify(token, false);// xác thực không phải là refresh
+            verify(token);// xác thực không phải là refresh
         } catch (GlobalException appException) {
             isCheck = false;
         }
@@ -82,21 +78,14 @@ public class AuthenticateService {
                 .build();
     }
 
-    public SignedJWT verify(String token, boolean isRefresh) throws JOSEException, ParseException {
+    public SignedJWT verify(String token) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         boolean isValid = signedJWT.verify(verifier);
 
-        Date expireDate = (isRefresh)
-                ? new Date(signedJWT.getJWTClaimsSet()
-                .getIssueTime()
-                .toInstant()
-                .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS)
-                .toEpochMilli())
-                : signedJWT.getJWTClaimsSet()
-                .getExpirationTime();
+        Date expireDate = signedJWT.getJWTClaimsSet().getExpirationTime();
 
 
         String id_token = signedJWT.getJWTClaimsSet().getJWTID();

@@ -20,5 +20,5 @@ spring:
 
 jwt:
   secretKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
-  valid-duration: 36000
-  refreshable-duration: 72000 # in seconds
+  valid-duration: 36000 #seconds
+

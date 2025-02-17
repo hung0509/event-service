@@ -11,4 +11,6 @@ public interface EventService {
     public List<EventResDto> getEventByStatus(String status);
 
     public EventResDto getById(int id);
+
+    public List<EventResDto> getAll();
 }

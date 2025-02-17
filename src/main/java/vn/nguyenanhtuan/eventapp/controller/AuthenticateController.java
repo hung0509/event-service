@@ -1,5 +1,6 @@
 package vn.nguyenanhtuan.eventapp.controller;
 
+import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -10,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.nguyenanhtuan.eventapp.dto.ApiResponse;
 import vn.nguyenanhtuan.eventapp.dto.request.AuthenticateRequest;
+import vn.nguyenanhtuan.eventapp.dto.request.IntrospectRequest;
 import vn.nguyenanhtuan.eventapp.dto.response.AuthenticateResponse;
+import vn.nguyenanhtuan.eventapp.dto.response.IntrospectResponse;
 import vn.nguyenanhtuan.eventapp.service.AuthenticateService;
+
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,6 +31,15 @@ public class AuthenticateController {
         log.info("*log authentication by email and password*");
         return ApiResponse.<AuthenticateResponse>builder()
                 .result(authenticateService.authenticate(req))
+                .message("Login successfully!")
+                .build();
+    }
+
+    @PostMapping("/introspect")
+    public ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest req) throws ParseException, JOSEException {
+        log.info("*log authentication by email and password*");
+        return ApiResponse.<IntrospectResponse>builder()
+                .result(authenticateService.introspect(req))
                 .message("Login successfully!")
                 .build();
     }

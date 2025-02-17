@@ -20,12 +20,21 @@ import java.util.List;
 public class EventController {
     EventService eventService;
 
+    @GetMapping
+    public ApiResponse<List<EventResDto>> getAllEvent(){
+        log.info("*Log table event. get all event  in db*");
+        return ApiResponse.<List<EventResDto>>builder()
+                .result(eventService.getAll())
+                .message("get all event Successfully!")
+                .build();
+    }
+
     @GetMapping("/{status}")
     public ApiResponse<List<EventResDto>> getEvent(@PathVariable String status) {
         log.info("*Log table event. get event by staus in db*");
         return ApiResponse.<List<EventResDto>>builder()
                 .result(eventService.getEventByStatus(status))
-                .message("Save event Successfully!")
+                .message("get event by status Successfully!")
                 .build();
     }
 
@@ -34,7 +43,7 @@ public class EventController {
         log.info("*Log table event. get event by id in db*");
         return ApiResponse.<EventResDto>builder()
                 .result(eventService.getById(id))
-                .message("Save event Successfully!")
+                .message("get event by id Successfully!")
                 .build();
     }
 

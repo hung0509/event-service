@@ -48,6 +48,10 @@ public class EventServiceImpl implements EventService {
             list = eventRepository.findAllByStatus(Status.PENDING.name());
         else if(status.equalsIgnoreCase("approved"))
             list = eventRepository.findAllByStatus(Status.APPROVE.name());
+        else if(status.equalsIgnoreCase("reject"))
+            list = eventRepository.findAllByStatus(Status.REJECT.name());
+        else
+            throw new GlobalException(ErrorCode.STATUS_NOT_EXIST);
 
 //        List<EventResDto> data = new ArrayList<>();
 //
@@ -69,5 +73,11 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new GlobalException(ErrorCode.EVENT_NOT_EXIST));
         return eventMapper.toEventResDto(event);
+    }
+
+    @Override
+    public List<EventResDto> getAll(){
+        var list = eventRepository.findAll();
+        return list.stream().map(eventMapper::toEventResDto).toList();
     }
 }

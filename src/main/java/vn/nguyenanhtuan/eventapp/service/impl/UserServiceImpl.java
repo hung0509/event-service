@@ -17,6 +17,8 @@ import vn.nguyenanhtuan.eventapp.reposiroty.RoleRepository;
 import vn.nguyenanhtuan.eventapp.reposiroty.UserRepository;
 import vn.nguyenanhtuan.eventapp.service.UserService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,5 +41,11 @@ public class UserServiceImpl implements UserService {
         user = userRepository.save(user);
 
         return userMapper.toUserResponseDto(user);
+    }
+
+    @Override
+    public List<UserResponseDto> getAll() {
+        var list = userRepository.findAll();
+        return list.stream().map(userMapper::toUserResponseDto).toList();
     }
 }

@@ -14,6 +14,7 @@ public enum ErrorCode {
     USER_ALREADY_EXIST(1003, "User is already exist", HttpStatus.BAD_REQUEST),
     FACULTY_NOT_EXIST(1004, "Faculty not exist", HttpStatus.BAD_REQUEST),
     EVENT_NOT_EXIST(1005, "Event not exist", HttpStatus.BAD_REQUEST),
+    STATUS_NOT_EXIST(1006, "Status not exist", HttpStatus.BAD_REQUEST),
     ;
 
     int code;
