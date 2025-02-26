@@ -1,5 +1,6 @@
 package vn.nguyenanhtuan.eventapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,5 +26,6 @@ public class Category {
     String categoryLogo;
 
     @OneToMany(mappedBy = "category")
+    @JsonManagedReference
     List<Event> events;
 }

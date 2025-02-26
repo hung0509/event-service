@@ -2,6 +2,7 @@ package vn.nguyenanhtuan.eventapp.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.nguyenanhtuan.eventapp.entity.Category;
 
 import java.util.Date;
 
@@ -24,6 +25,6 @@ public class EventResDto {
     String location;
     String comment;
     String status;
-    String facultyName;
-    String facultyLogo;
+    Category category;
+    int faculty_id;
 }

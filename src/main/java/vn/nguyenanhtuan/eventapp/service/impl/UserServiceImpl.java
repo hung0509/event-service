@@ -18,6 +18,7 @@ import vn.nguyenanhtuan.eventapp.reposiroty.UserRepository;
 import vn.nguyenanhtuan.eventapp.service.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +47,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDto> getAll() {
         var list = userRepository.findAll();
+        return list.stream().map(userMapper::toUserResponseDto).toList();
+    }
+
+    @Override
+    public List<UserResponseDto> getByRole(String name) {
+        Role role = roleRepository.findByRoleName(name);
+
+        if(Objects.isNull(role)){
+            throw new GlobalException(ErrorCode.ROLE_NOT_EXIST);
+        }
+
+        var list = userRepository.findByRole(role);
         return list.stream().map(userMapper::toUserResponseDto).toList();
     }
 }

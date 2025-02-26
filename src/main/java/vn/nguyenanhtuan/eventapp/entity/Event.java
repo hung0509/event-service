@@ -62,5 +62,6 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonBackReference
     Category category;
 }

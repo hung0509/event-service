@@ -11,6 +11,7 @@ import java.util.Date;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventReqDto {
+    int faculty_id;
     String title;
     String description;
     Date startDate;

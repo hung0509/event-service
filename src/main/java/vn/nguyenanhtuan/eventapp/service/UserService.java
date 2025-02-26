@@ -9,4 +9,6 @@ public interface UserService{
     public UserResponseDto save(UserRequestDto req);
 
     public List<UserResponseDto> getAll();
+
+    public List<UserResponseDto> getByRole(String role);
 }

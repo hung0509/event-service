@@ -9,6 +9,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryReqDto {
-    String name;
-    String logo;
+    String categoryName;
+    String categoryLogo;
 }

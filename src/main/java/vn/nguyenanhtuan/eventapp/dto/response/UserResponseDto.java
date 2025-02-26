@@ -1,5 +1,6 @@
 package vn.nguyenanhtuan.eventapp.dto.response;
 
+import jakarta.annotation.Nullable;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,4 +19,7 @@ public class UserResponseDto {
     String password;
     String username;
     String phone;
+    String facultyName;
+    String facultyLogo;
+    String facultyDescription;
 }

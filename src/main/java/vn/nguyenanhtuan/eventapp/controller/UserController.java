@@ -37,4 +37,12 @@ public class UserController {
                 .result(userService.getAll())
                 .build();
     }
+    @GetMapping("/role/{name}")
+    public ApiResponse<List<UserResponseDto>> getAllByRole(@PathVariable String name){
+        log.info("*Log table user. --call api get all user-- *");
+        return ApiResponse.<List<UserResponseDto>>builder()
+                .message("Get users succesfully!")
+                .result(userService.getByRole(name))
+                .build();
+    }
 }

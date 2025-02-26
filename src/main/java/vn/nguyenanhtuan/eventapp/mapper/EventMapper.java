@@ -9,6 +9,7 @@ import vn.nguyenanhtuan.eventapp.entity.Event;
 
 @Mapper(componentModel = "spring")
 public interface EventMapper {
+    @Mapping(target = "category", ignore = true)
     Event toEvent(EventReqDto req);
 
     EventResDto toEventResDto(Event event);
