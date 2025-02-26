@@ -10,14 +10,11 @@ import vn.nguyenanhtuan.eventapp.constant.Status;
 import vn.nguyenanhtuan.eventapp.dto.request.EventReqDto;
 import vn.nguyenanhtuan.eventapp.dto.response.EventResDto;
 import vn.nguyenanhtuan.eventapp.entity.Event;
-import vn.nguyenanhtuan.eventapp.entity.Faculty;
 import vn.nguyenanhtuan.eventapp.handle.GlobalException;
 import vn.nguyenanhtuan.eventapp.mapper.EventMapper;
 import vn.nguyenanhtuan.eventapp.reposiroty.EventRepository;
-import vn.nguyenanhtuan.eventapp.reposiroty.FacultyRepository;
 import vn.nguyenanhtuan.eventapp.service.EventService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,18 +24,12 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
     EventRepository eventRepository;
     EventMapper eventMapper;
-    FacultyRepository facultyRepository;
 
     @Override
     public EventResDto save(EventReqDto eventReqDto) {
-        Event event = eventMapper.toEvent(eventReqDto);
 
-        Faculty faculty = facultyRepository.findById(eventReqDto.getFacultyId())
-                .orElseThrow(() -> new GlobalException(ErrorCode.FACULTY_NOT_EXIST));
 
-        event.setFaculty(faculty);
-
-        return eventMapper.toEventResDto(eventRepository.save(event));
+        return eventMapper.toEventResDto(eventRepository.save(null));
     }
 
     @Override
@@ -52,18 +43,6 @@ public class EventServiceImpl implements EventService {
             list = eventRepository.findAllByStatus(Status.REJECT.name());
         else
             throw new GlobalException(ErrorCode.STATUS_NOT_EXIST);
-
-//        List<EventResDto> data = new ArrayList<>();
-//
-//        for(Event event : list){
-//            EventResDto eventResDto = eventMapper.toEventResDto(event);
-//            eventResDto.setFacultyName(event.getFaculty().getFacultyName());
-//            eventResDto.setFacultyLogo(event.getFaculty().getFacultyLogo());
-//
-//            data.add(eventResDto);
-//        }
-//
-//        return data;
 
         return list.stream().map(eventMapper::toEventResDto).toList();
     }

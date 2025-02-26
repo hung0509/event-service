@@ -23,5 +23,5 @@ public class EventReqDto {
     String location;
     String comment;
     String status;
-    int facultyId;
+    int catgoryId;
 }

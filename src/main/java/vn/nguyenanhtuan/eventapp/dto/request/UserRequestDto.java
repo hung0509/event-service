@@ -1,5 +1,7 @@
 package vn.nguyenanhtuan.eventapp.dto.request;
 
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,7 +19,21 @@ public class UserRequestDto {
     @Email
     String email;
     String password;
+
+    @Nullable
     String username;
+
+    @Nullable
     String phone;
+
+    @Nullable
+    String facultyName;
+
+    @Nullable
+    String facultyLogo;
+
+    @Nullable
+    String facultyDescription;
+
     int role;
 }

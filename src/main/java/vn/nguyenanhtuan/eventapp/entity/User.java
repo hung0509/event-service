@@ -25,17 +25,27 @@ public class User {
     @Column(name ="password", nullable = false)
     String password;
 
-    @Column(name ="username", nullable = false)
+    @Column(name ="username")
     String username;
 
     @Column(name = "phone")
     String phone;
+
+    @Column(name="faculty_name")
+    String facultyName;
+
+    @Column(name="faculty_logo")
+    String facultyLogo;
+
+    @Column(name="faculty_description")
+    String facultyDescription;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     @JsonManagedReference
     Role role;
 
-    @ManyToMany(mappedBy = "users")
-    List<Event> events;
+//
+//    @OneToMany(mappedBy = "user")
+//    List<RegisEvent> regisEvents;
 }

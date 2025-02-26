@@ -15,6 +15,7 @@ public enum ErrorCode {
     FACULTY_NOT_EXIST(1004, "Faculty not exist", HttpStatus.BAD_REQUEST),
     EVENT_NOT_EXIST(1005, "Event not exist", HttpStatus.BAD_REQUEST),
     STATUS_NOT_EXIST(1006, "Status not exist", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_EXIST(1007, "category not exist", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

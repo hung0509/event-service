@@ -1,6 +1,5 @@
 package vn.nguyenanhtuan.eventapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,22 +9,21 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Entity
-@Table(name="faculty")
+@Table(name="category")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Faculty {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @Column(name="facultyName")
-    String facultyName;
+    @Column(name="category_name")
+    String categoryName;
 
-    @Column(name="facultyLogo")
-    String facultyLogo;
+    @Column(name="category_logo")
+    String categoryLogo;
 
-    @OneToMany(mappedBy = "faculty")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "category")
     List<Event> events;
 }

@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FacultyReqDto {
-    String facultyName;
-    String facultyLogo;
+public class CategoryReqDto {
+    String name;
+    String logo;
 }

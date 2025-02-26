@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import vn.nguyenanhtuan.eventapp.dto.request.RoleReqDto;
 import vn.nguyenanhtuan.eventapp.dto.response.RoleResDto;
 import vn.nguyenanhtuan.eventapp.entity.Role;
+import vn.nguyenanhtuan.eventapp.mapper.RoleMapper;
 import vn.nguyenanhtuan.eventapp.reposiroty.RoleRepository;
 import vn.nguyenanhtuan.eventapp.service.RoleService;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ import vn.nguyenanhtuan.eventapp.service.RoleService;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
+    RoleMapper roleMapper;
 
     @Override
     public RoleResDto save(RoleReqDto req) {
@@ -29,5 +33,11 @@ public class RoleServiceImpl implements RoleService {
                 .id(role.getId())
                 .roleName(role.getRoleName())
                 .build();
+    }
+
+    @Override
+    public List<RoleResDto> findAll() {
+        var list = roleRepository.findAll();
+        return list.stream().map(roleMapper:: toRoleResDto).toList();
     }
 }

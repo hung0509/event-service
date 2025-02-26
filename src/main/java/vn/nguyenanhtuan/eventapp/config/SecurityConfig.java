@@ -23,11 +23,11 @@ public class SecurityConfig {
     //fix
     private final String[] URL_PUBLIC_POST = {
             "/auth", "/auth/login", "/auth/logout", "/auth/introspect",
-            "/users",
+            "/users", "/categories", "/roles"
     };
 
     private final String[] URL_PUBLIC_GET = {
-            "/events", "/faculties"
+            "/events", "/categories", "/roles"
     };
 
     @Bean

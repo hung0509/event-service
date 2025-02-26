@@ -57,17 +57,10 @@ public class Event {
     @Column(name = "comment")
     String comment;
 
-    @ManyToMany
-    @JoinTable(
-            name = "regis_event",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @JsonManagedReference
-    List<User> users;
+//    @OneToMany(mappedBy = "event")
+//    List<RegisEvent> regisEvents;
 
     @ManyToOne
-    @JoinColumn(name = "faculty_id")
-    @JsonBackReference
-    Faculty faculty;
+    @JoinColumn(name = "category_id")
+    Category category;
 }

@@ -2,7 +2,6 @@ package vn.nguyenanhtuan.eventapp.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import vn.nguyenanhtuan.eventapp.entity.Faculty;
 
 import java.util.Date;
 

@@ -9,10 +9,7 @@ import vn.nguyenanhtuan.eventapp.entity.Event;
 
 @Mapper(componentModel = "spring")
 public interface EventMapper {
-    @Mapping(target = "faculty", ignore = true)
     Event toEvent(EventReqDto req);
 
-    @Mapping(target = "facultyName", source = "faculty.facultyName")
-    @Mapping(target = "facultyLogo", source = "faculty.facultyLogo")
     EventResDto toEventResDto(Event event);
 }
