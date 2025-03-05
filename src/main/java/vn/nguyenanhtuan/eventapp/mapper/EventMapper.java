@@ -10,7 +10,13 @@ import vn.nguyenanhtuan.eventapp.entity.Event;
 @Mapper(componentModel = "spring")
 public interface EventMapper {
     @Mapping(target = "category", ignore = true)
+    @Mapping(target = "bannerUrl", ignore = true)
+    @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "startDate", ignore = true)
+    @Mapping(target = "endDate", ignore = true)
     Event toEvent(EventReqDto req);
 
+    @Mapping(source = "category.id", target = "categoryId")
+    @Mapping(source = "category.categoryName", target = "categoryName")
     EventResDto toEventResDto(Event event);
 }

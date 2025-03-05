@@ -23,12 +23,9 @@ public class SecurityConfig {
     //fix
     private final String[] URL_PUBLIC_POST = {
             "/auth", "/auth/login", "/auth/logout", "/auth/introspect",
-            "/users", "/categories", "/roles"
+            "/users", "/categories", "/roles",
     };
 
-    private final String[] URL_PUBLIC_GET = {
-            "/events", "/categories", "/roles"
-    };
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -44,7 +41,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> {
                     request.requestMatchers(HttpMethod.POST, URL_PUBLIC_POST).permitAll()
-                            .requestMatchers(HttpMethod.GET, URL_PUBLIC_GET).permitAll()//xac thuc email
+                          //  .requestMatchers(HttpMethod.GET, URL_PUBLIC_GET).permitAll()//xac thuc email
                             .anyRequest().authenticated();
                 }
         );

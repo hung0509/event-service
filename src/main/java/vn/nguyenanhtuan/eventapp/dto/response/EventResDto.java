@@ -25,6 +25,7 @@ public class EventResDto {
     String location;
     String comment;
     String status;
-    Category category;
+    String categoryId;
+    String categoryName;
     int faculty_id;
 }

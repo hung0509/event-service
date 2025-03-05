@@ -7,9 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import vn.nguyenanhtuan.eventapp.dto.ApiResponse;
 import vn.nguyenanhtuan.eventapp.dto.request.EventReqDto;
+import vn.nguyenanhtuan.eventapp.dto.request.RegisEventReqDto;
 import vn.nguyenanhtuan.eventapp.dto.response.EventResDto;
 import vn.nguyenanhtuan.eventapp.service.EventService;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 @RestController
@@ -21,10 +24,19 @@ public class EventController {
     EventService eventService;
 
     @GetMapping
-    public ApiResponse<List<EventResDto>> getAllEvent(){
+    public ApiResponse<List<EventResDto>> getAllEvent(@ModelAttribute RegisEventReqDto req){
         log.info("*Log table event. get all event  in db*");
         return ApiResponse.<List<EventResDto>>builder()
-                .result(eventService.getAll())
+                .result(eventService.getAll(req))
+                .message("get all event Successfully!")
+                .build();
+    }
+
+    @PostMapping("status")
+    public ApiResponse<EventResDto> update(@RequestParam int id, @RequestParam String status){
+        log.info("*Log table event. get all event  in db*");
+        return ApiResponse.<EventResDto>builder()
+                .result(eventService.update(status, id))
                 .message("get all event Successfully!")
                 .build();
     }
@@ -48,7 +60,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ApiResponse<EventResDto> addEvent(@RequestBody EventReqDto req) {
+    public ApiResponse<EventResDto> addEvent(@ModelAttribute EventReqDto req) throws GeneralSecurityException, IOException {
         log.info("*Log table event. save event in db*");
         return ApiResponse.<EventResDto>builder()
                 .result(eventService.save(req))

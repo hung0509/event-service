@@ -16,6 +16,8 @@ public enum ErrorCode {
     EVENT_NOT_EXIST(1005, "Event not exist", HttpStatus.BAD_REQUEST),
     STATUS_NOT_EXIST(1006, "Status not exist", HttpStatus.BAD_REQUEST),
     CATEGORY_NOT_EXIST(1007, "category not exist", HttpStatus.BAD_REQUEST),
+    NOT_VALID_FORMAT_IMAGE(2001, "This file is not image", HttpStatus.BAD_REQUEST),
+    NOT_VALID_DATE(2002, "Date is not correct format", HttpStatus.BAD_REQUEST),
     ;
 
     int code;
