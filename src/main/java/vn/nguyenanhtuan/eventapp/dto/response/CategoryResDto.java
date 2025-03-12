@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryResDto {
+public class    CategoryResDto {
     int id;
     String categoryName;
     String categoryLogo;

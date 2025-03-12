@@ -6,6 +6,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import vn.nguyenanhtuan.eventapp.dto.ApiResponse;
+import vn.nguyenanhtuan.eventapp.dto.request.EventReqDto;
+import vn.nguyenanhtuan.eventapp.dto.request.FacultyUpdateReq;
 import vn.nguyenanhtuan.eventapp.dto.request.UserRequestDto;
 import vn.nguyenanhtuan.eventapp.dto.request.UserUpdateReq;
 import vn.nguyenanhtuan.eventapp.dto.response.UserResponseDto;
@@ -45,6 +47,15 @@ public class UserController {
         return ApiResponse.<UserResponseDto>builder()
                 .message("Save user successfully!")
                 .result(userService.update(req, id))
+                .build();
+    }
+
+    @PutMapping("/faculty/{id}")
+    public ApiResponse<UserResponseDto> updateFaculty(@PathVariable int id, @ModelAttribute FacultyUpdateReq req) {
+        log.info("*Log table user. --call api save user-- *");
+        return ApiResponse.<UserResponseDto>builder()
+                .message("Save user successfully!")
+                .result(userService.updateFaculty(req, id))
                 .build();
     }
 

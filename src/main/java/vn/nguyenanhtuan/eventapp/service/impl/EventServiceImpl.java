@@ -166,6 +166,7 @@ public class EventServiceImpl implements EventService {
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(contentType);
+        metadata.setContentLength(file.getSize());
 
         String keyName = AWS_FOLDER + "/" + file.getOriginalFilename();
         PutObjectRequest request = new PutObjectRequest(AWS_BUCKET, keyName, inputStream, metadata);

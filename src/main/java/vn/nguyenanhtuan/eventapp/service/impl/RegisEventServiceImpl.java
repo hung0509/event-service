@@ -30,6 +30,10 @@ import vn.nguyenanhtuan.eventapp.service.RigisEventService;
 import javax.sql.DataSource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -52,7 +56,7 @@ public class RegisEventServiceImpl implements RigisEventService{
                 " join event te on tre.event_id = te.id where user_id = :userId and role_id = 2 ");
 
         if(req.getStatus() != null){
-            sql.append(" and tre.status = :status ");
+            sql.append(" and te.status = :status ");
         }
 
         if(req.getTitle() != null){
@@ -72,14 +76,14 @@ public class RegisEventServiceImpl implements RigisEventService{
         }
 
         log.info(req.getCategoryId() + "");
-        if(req.getCategoryId() != 0){
+        if(req.getCategoryId() != null){
             sql.append(" and category_id = :categoryId ");
         }
 
         Query query =  entityManager.createNativeQuery(sql.toString());
         query.setParameter("userId", req.getFaculty_id());
 
-        if(req.getCategoryId() != 0) {
+        if(req.getCategoryId() != null) {
             query.setParameter("categoryId", req.getCategoryId());
         }
 
@@ -113,11 +117,96 @@ public class RegisEventServiceImpl implements RigisEventService{
                         .title(ParseHelper.STRING.parse("title"))
                         .description(ParseHelper.STRING.parse(rs.get("description")))
                         .location(ParseHelper.STRING.parse(rs.get("location")))
-                        .startDate(convertStringtoDate(ParseHelper.STRING.parse(rs.get("start_date"))))
-                        .endDate(convertStringtoDate(ParseHelper.STRING.parse(rs.get("end_date"))))
+                        .startDate(convertStringtoDate(ParseHelper.INSTANT.parse(rs.get("start_date"))))
+                        .endDate(convertStringtoDate(ParseHelper.INSTANT.parse(rs.get("end_date"))))
                         .bannerUrl(ParseHelper.STRING.parse(rs.get("banner_url")))
                         .imageUrl(ParseHelper.STRING.parse(rs.get("image_url")))
                         .status(ParseHelper.STRING.parse(rs.get("status")))
+                        .availableSeats(ParseHelper.INT.parse(rs.get("available_seats")))
+                        .build();
+                eventResDtos.add(eventResDto);
+            });
+
+            return eventResDtos.stream().map(eventMapper::toEventResDto).toList();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<EventResDto> getEventHaveFilterV2(RegisEventReqDto req) {
+        StringBuilder sql =  new StringBuilder("select te.*, tre.status as 'status_event_of_user' from regis_event tre " +
+                " join user u on u.id = tre.user_id " +
+                " join event te on tre.event_id = te.id where user_id = :userId and role_id = 3 ");
+
+        if(req.getStatus() != null){
+            sql.append(" and tre.status like :status ");
+        }
+
+        if(req.getTitle() != null){
+            sql.append(" and title like :title ");
+        }
+
+        if(req.getTitle() != null){
+            sql.append(" and location like :location ");
+        }
+
+        if(req.getStartDate() != null){
+            sql.append(" and start_date >= :startDate ");
+        }
+
+        if(req.getEndDate() != null){
+            sql.append(" and end_date <= :endDate ");
+        }
+
+        if(req.getCategoryId() != null){
+            sql.append(" and category_id = :categoryId ");
+        }
+
+        Query query =  entityManager.createNativeQuery(sql.toString());
+        query.setParameter("userId", req.getFaculty_id());
+
+        if(req.getCategoryId() != null) {
+            query.setParameter("categoryId", req.getCategoryId());
+        }
+
+        if(req.getStartDate() != null) {
+            query.setParameter("startDate", req.getStartDate());
+        }
+        if(req.getEndDate() != null) {
+            query.setParameter("endDate", req.getEndDate());
+        }
+        if(req.getStatus() != null) {
+            query.setParameter("status", req.getStatus());
+        }
+        if(req.getTitle() != null) {
+            query.setParameter("title", "%" + req.getTitle() + "%");
+        }
+        if(req.getLocation() != null) {
+            query.setParameter("location", "%" + req.getLocation() + "%");
+        }
+
+        List<Map<String, Object>> results = query.unwrap(NativeQuery.class)
+                .setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE)
+                .getResultList();
+
+        List<Event> eventResDtos = new ArrayList<>();
+        try{
+            results.forEach(rs -> {
+                log.info(rs.get("start_date"). toString());
+                Event eventResDto = Event.builder()
+                        .id(ParseHelper.INT.parse(rs.get("id")))
+                        .availableSeats(ParseHelper.INT.parse(rs.get("total_seats")))
+                        .title(ParseHelper.STRING.parse("title"))
+                        .description(ParseHelper.STRING.parse(rs.get("description")))
+                        .location(ParseHelper.STRING.parse(rs.get("location")))
+                        .startDate(convertStringtoDate(ParseHelper.INSTANT.parse(rs.get("start_date"))))
+                        .endDate(convertStringtoDate(ParseHelper.INSTANT.parse(rs.get("end_date"))))
+                        .bannerUrl(ParseHelper.STRING.parse(rs.get("banner_url")))
+                        .imageUrl(ParseHelper.STRING.parse(rs.get("image_url")))
+                        .status(ParseHelper.STRING.parse(rs.get("status_event_of_user")))
                         .availableSeats(ParseHelper.INT.parse(rs.get("available_seats")))
                         .build();
                 eventResDtos.add(eventResDto);
@@ -176,19 +265,23 @@ public class RegisEventServiceImpl implements RigisEventService{
         return List.of();
     }
 
-    private Date convertStringtoDate(String dateInit){
-        SimpleDateFormat outputFormatter = new SimpleDateFormat("yyyy/MM/dd");
-
+    private Date convertStringtoDate(Instant dateInit){
+        if(dateInit == null)
+            return null;
+        LocalDateTime localDateTime = dateInit.atZone(ZoneId.of("UTC")).toLocalDateTime();
+        // Define the desired date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // Format the date to String
+        String formattedDateStr = localDateTime.format(formatter);
+        // Convert String to Date
+        Date formattedDate = null;
         try {
-            // Phân tích cú pháp chuỗi ban đầu thành đối tượng Date
-            Date date = outputFormatter.parse(dateInit);
-            // Định dạng lại đối tượng Date thành chuỗi có dạng yyyy/MM/dd
-
-            return date;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            formattedDate = sdf.parse(formattedDateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return null;
+        return formattedDate;
     }
 
 }

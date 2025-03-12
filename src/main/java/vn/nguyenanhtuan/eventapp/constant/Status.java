@@ -1,5 +1,5 @@
 package vn.nguyenanhtuan.eventapp.constant;
 
 public enum Status {
-    PENDING, APPROVE, REJECT, REGISTERED
+    PENDING, APPROVE, REJECT, REGISTERED, ATTEND
 }

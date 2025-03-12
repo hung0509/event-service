@@ -11,6 +11,8 @@ import java.util.List;
 public interface RigisEventService {
     List<EventResDto> getEventHaveFilter(RegisEventReqDto req);
 
+    List<EventResDto> getEventHaveFilterV2(RegisEventReqDto req);
+
     Integer registerEvent(RegisEventDto req);
 
     List<UserResponseDto> getUserByEventId(int id);

@@ -15,6 +15,7 @@ public class EventSpecification {
         return (root, query, criteriaBuilder) -> status == null ? criteriaBuilder.conjunction() : criteriaBuilder.like(root.get("status"), status);
     }
 
+
     public static Specification<Event> isTitleOrLocation(String key) {
         return (root, query, criteriaBuilder) -> {
             if (key == null) {

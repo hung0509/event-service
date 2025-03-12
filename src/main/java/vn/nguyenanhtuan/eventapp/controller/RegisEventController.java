@@ -31,6 +31,14 @@ public class RegisEventController {
                 .build();
     }
 
+    @GetMapping("/user")
+    public ApiResponse<List<EventResDto>> getEventHaveFilterV2(@ModelAttribute RegisEventReqDto req){
+        log.info("*Log table event-regis. get all event assign by user_id  in db*");
+        return ApiResponse.<List<EventResDto>>builder()
+                .result(rigisEventService.getEventHaveFilterV2(req))
+                .build();
+    }
+
     @GetMapping("/{id}")
     public ApiResponse<List<UserResponseDto>> getUserByEventId(@PathVariable int id){
         log.info("*Log table event-regis. get all event assign by user_id  in db*");
