@@ -63,7 +63,10 @@ public class RegisEventServiceImpl implements RigisEventService{
             sql.append(" and title like :title ");
         }
 
-        if(req.getTitle() != null){
+//        if(req.getTitle() != null){
+//            sql.append(" and location like :location ");
+//        }
+        if(req.getLocation() != null){
             sql.append(" and location like :location ");
         }
 
@@ -149,7 +152,10 @@ public class RegisEventServiceImpl implements RigisEventService{
             sql.append(" and title like :title ");
         }
 
-        if(req.getTitle() != null){
+//        if(req.getTitle() != null){
+//            sql.append(" and location like :location ");
+//        }
+        if(req.getLocation() != null){
             sql.append(" and location like :location ");
         }
 

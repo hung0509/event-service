@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateFaculty(FacultyUpdateReq req, int id)  {
         User user = userRepository.findById(id).orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_EXIST));
-        String password = (user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : null;
+//        String password = (user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : null;
 
         if(req.getFacultyName() != null)
             user.setFacultyName(req.getFacultyName());
@@ -131,8 +131,11 @@ public class UserServiceImpl implements UserService {
         if(req.getFacultyDescription() != null)
             user.setFacultyDescription(req.getFacultyDescription());
 
-        if(password != null)
-            user.setPassword(password);
+        if(req.getPassword() != null)
+            user.setPassword(passwordEncoder.encode(req.getPassword()));
+
+//        if(password != null)
+//            user.setPassword(password);
 
         user = userRepository.save(user);
         return userMapper.toUserResponseDto(user);
