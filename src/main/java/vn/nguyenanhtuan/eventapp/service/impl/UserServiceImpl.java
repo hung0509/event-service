@@ -30,6 +30,8 @@ import vn.nguyenanhtuan.eventapp.service.UserService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -151,7 +153,7 @@ public class UserServiceImpl implements UserService {
         message.setTo(req.getEmail());
         message.setSubject("Đăng ký tổ chức mơ");
         message.setText("Email: " + req.getEmail() + "/n Password: abc@123");
-        message.setFrom("hungtaithe12@gmail.com");
+        message.setFrom("no-reply@gmail.com");
         mailSender.send(message);
 
         Role role = roleRepository.findById(2).orElseThrow(() -> new GlobalException(ErrorCode.ROLE_NOT_EXIST));
@@ -166,6 +168,43 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPassword())
                 .facultyName(user.getFacultyName())
                 .build();
+    }
+
+    @Override
+    public String forgetPassword(String email) {
+        User user = userRepository.findByEmail(email);
+        if(user != null) {
+            String password = generateCustomId(email, user.getId());
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("Thiết lập lại mật khẩu" );
+            message.setText("Password mới là:" +  password);
+            message.setFrom("no-reply@gmail.com");
+            mailSender.send(message);
+        }else{
+            throw new GlobalException(ErrorCode.USER_NOT_EXIST);
+        }
+
+
+        return "Gửi email thành công";
+    }
+
+    private String generateCustomId(String email, int id) {
+        // Extract first 3 characters of email before '@'
+        String emailPart = email.split("@")[0].substring(0, Math.min(3, email.length())).toUpperCase();
+
+        // Get current time (mm:ss)
+        LocalDateTime now = LocalDateTime.now();
+        String timePart = now.format(DateTimeFormatter.ofPattern("mmss"));
+
+        // Ensure ID is at least 2 digits
+        String idPart = String.format("%02d", id);
+
+        // Concatenate parts
+        return emailPart + timePart + idPart;
     }
 
     private String uploadImage(MultipartFile file) throws IOException {

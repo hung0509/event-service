@@ -17,5 +17,5 @@ public interface EventService {
 
     public List<EventResDto> getAll(RegisEventReqDto req);
 
-    public EventResDto update(String status, int id);
+    public EventResDto update(String status, int id, String comment);
 }

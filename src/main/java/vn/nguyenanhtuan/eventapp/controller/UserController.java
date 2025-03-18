@@ -32,6 +32,16 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/reset")
+    public ApiResponse<String> forgetPassword(@RequestParam String email) {
+        log.info("*Log table user. --call api save user-- *");
+        userService.forgetPassword(email);
+        return ApiResponse.<String>builder()
+                .message("Save user successfully!")
+                .result("Gửi email thành công")
+                .build();
+    }
+
     @PostMapping("/faculty")
     public ApiResponse<UserResponseDto> createFaculty(@RequestBody UserRequestDto req) {
         log.info("*Log table user. --call api save user-- *");

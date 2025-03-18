@@ -21,4 +21,7 @@ public interface UserService{
     public UserResponseDto getUserById(int id);
 
     public UserResponseDto registerFaculty(UserRequestDto req);
+
+    public String forgetPassword(String email);
+
 }

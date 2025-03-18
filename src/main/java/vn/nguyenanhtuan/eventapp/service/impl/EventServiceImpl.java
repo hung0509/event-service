@@ -135,7 +135,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventResDto update(String status, int id) {
+    public EventResDto update(String status, int id, String comment) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new GlobalException(ErrorCode.EVENT_NOT_EXIST));
         log.info(status);
@@ -143,6 +143,9 @@ public class EventServiceImpl implements EventService {
             event.setStatus(status);
         }else if(status.equals(Status.REJECT.name())){
             event.setStatus(status);
+            if(comment != null)
+                event.setComment(comment);
+
         }else{
             throw new GlobalException(ErrorCode.STATUS_NOT_EXIST);
         }
