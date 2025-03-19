@@ -63,7 +63,10 @@ public class RegisEventServiceImpl implements RigisEventService{
             sql.append(" and title like :title ");
         }
 
-        if(req.getTitle() != null){
+//        if(req.getTitle() != null){
+//            sql.append(" and location like :location ");
+//        }
+        if(req.getLocation() != null){
             sql.append(" and location like :location ");
         }
 
@@ -113,8 +116,8 @@ public class RegisEventServiceImpl implements RigisEventService{
                 log.info(rs.get("start_date"). toString());
                 Event eventResDto = Event.builder()
                         .id(ParseHelper.INT.parse(rs.get("id")))
-                        .availableSeats(ParseHelper.INT.parse(rs.get("total_seats")))
-                        .title(ParseHelper.STRING.parse("title"))
+                        .totalSeats(ParseHelper.INT.parse(rs.get("total_seats")))
+                        .title(ParseHelper.STRING.parse(rs.get("title")))
                         .description(ParseHelper.STRING.parse(rs.get("description")))
                         .location(ParseHelper.STRING.parse(rs.get("location")))
                         .startDate(convertStringtoDate(ParseHelper.INSTANT.parse(rs.get("start_date"))))
@@ -149,7 +152,10 @@ public class RegisEventServiceImpl implements RigisEventService{
             sql.append(" and title like :title ");
         }
 
-        if(req.getTitle() != null){
+//        if(req.getTitle() != null){
+//            sql.append(" and location like :location ");
+//        }
+        if(req.getLocation() != null){
             sql.append(" and location like :location ");
         }
 
@@ -199,7 +205,7 @@ public class RegisEventServiceImpl implements RigisEventService{
                 Event eventResDto = Event.builder()
                         .id(ParseHelper.INT.parse(rs.get("id")))
                         .availableSeats(ParseHelper.INT.parse(rs.get("total_seats")))
-                        .title(ParseHelper.STRING.parse("title"))
+                        .title(ParseHelper.STRING.parse(rs.get("title")))
                         .description(ParseHelper.STRING.parse(rs.get("description")))
                         .location(ParseHelper.STRING.parse(rs.get("location")))
                         .startDate(convertStringtoDate(ParseHelper.INSTANT.parse(rs.get("start_date"))))
