@@ -33,7 +33,7 @@ public class EventController {
     }
 
     @PostMapping("status")
-    public ApiResponse<EventResDto> update(@RequestParam int id, @RequestParam String status, @RequestParam String comment){
+    public ApiResponse<EventResDto> update(@RequestParam int id, @RequestParam String status, @RequestParam(required = false) String comment){
         log.info("*Log table event. get all event  in db*");
         return ApiResponse.<EventResDto>builder()
                 .result(eventService.update(status, id, comment))
