@@ -68,7 +68,7 @@ public class AuthenticateService {
         boolean isCheck = true;
 
         try {
-            verify(token);// xác thực không phải là refresh
+            verify(token);
         } catch (GlobalException appException) {
             isCheck = false;
         }

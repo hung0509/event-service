@@ -23,7 +23,7 @@ public class SecurityConfig {
     //fix
     private final String[] URL_PUBLIC_POST = {
             "/auth", "/auth/login", "/auth/logout", "/auth/introspect",
-            "/users", "/categories", "/roles"
+            "/users", "/categories", "/roles", "/event-user"
     };
 
     private final String[] URL_PUBLIC_GET = {

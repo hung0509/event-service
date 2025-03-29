@@ -10,7 +10,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegisEventDto {
     int id;
-    int user_id;
-    int event_id;
+    Integer user_id;
+    Integer event_id;
     String status;
+    String guestName;
+    String emailGuest;
+    String phoneGuest;
 }

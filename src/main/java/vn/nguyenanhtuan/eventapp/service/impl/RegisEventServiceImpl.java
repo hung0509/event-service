@@ -18,11 +18,13 @@ import vn.nguyenanhtuan.eventapp.dto.request.RegisEventReqDto;
 import vn.nguyenanhtuan.eventapp.dto.response.EventResDto;
 import vn.nguyenanhtuan.eventapp.dto.response.UserResponseDto;
 import vn.nguyenanhtuan.eventapp.entity.Event;
+import vn.nguyenanhtuan.eventapp.entity.Guest;
 import vn.nguyenanhtuan.eventapp.entity.User;
 import vn.nguyenanhtuan.eventapp.handle.GlobalException;
 import vn.nguyenanhtuan.eventapp.mapper.EventMapper;
 import vn.nguyenanhtuan.eventapp.mapper.UserMapper;
 import vn.nguyenanhtuan.eventapp.reposiroty.EventRepository;
+import vn.nguyenanhtuan.eventapp.reposiroty.GuestRepository;
 import vn.nguyenanhtuan.eventapp.reposiroty.RegisEventRepository;
 import vn.nguyenanhtuan.eventapp.reposiroty.UserRepository;
 import vn.nguyenanhtuan.eventapp.service.RigisEventService;
@@ -48,6 +50,7 @@ public class RegisEventServiceImpl implements RigisEventService{
     UserMapper userMapper;
     EventRepository eventRepository;
     UserRepository userRepository;
+    GuestRepository guestRepository;
 
     @Override
     public List<EventResDto> getEventHaveFilter(RegisEventReqDto req) {
@@ -231,22 +234,39 @@ public class RegisEventServiceImpl implements RigisEventService{
     public Integer registerEvent(RegisEventDto req) {
         Event event = eventRepository.findById(req.getEvent_id()).orElseThrow(()
                 -> new GlobalException(ErrorCode.EVENT_NOT_EXIST));
-        User user = userRepository.findById(req.getUser_id()).orElseThrow(() ->
-                new GlobalException(ErrorCode.USER_NOT_EXIST));
+        if(req.getUser_id() != null) {
+            User user = userRepository.findById(req.getUser_id()).orElseThrow(() ->
+                    new GlobalException(ErrorCode.USER_NOT_EXIST));
 
-        StringBuilder sql = new StringBuilder("insert into regis_event(event_id, user_id, status) values(:event_id, :user_id, :status)");
+            StringBuilder sql = new StringBuilder("insert into regis_event(event_id, user_id, status) values(:event_id, :user_id, :status)");
 
-        Query query = entityManager.createNativeQuery(sql.toString());
-        query.setParameter("event_id", req.getEvent_id());
-        query.setParameter("user_id", user.getId());
-        query.setParameter("status", Status.REGISTERED.name());
-        int i = query.executeUpdate();
-        return i;
+            Query query = entityManager.createNativeQuery(sql.toString());
+            query.setParameter("event_id", req.getEvent_id());
+            query.setParameter("user_id", user.getId());
+            query.setParameter("status", Status.REGISTERED.name());
+            int i = query.executeUpdate();
+            return i;
+        }else{ // Tai khaon khach
+            Guest guest = Guest.builder()
+                    .email(req.getEmailGuest())
+                    .phone(req.getPhoneGuest())
+                    .username(req.getGuestName())
+                    .build();
+
+            guest = guestRepository.save(guest);
+            StringBuilder sql = new StringBuilder("insert into regis_event(event_id, guest_id, status) values(:event_id, :guest_id, :status)");
+            Query query = entityManager.createNativeQuery(sql.toString());
+            query.setParameter("event_id", req.getEvent_id());
+            query.setParameter("guest_id", guest.getId());
+            query.setParameter("status", Status.REGISTERED.name());
+            int i = query.executeUpdate();
+            return i;
+        }
     }
 
     @Override
     public List<UserResponseDto> getUserByEventId(int id) {
-        StringBuilder sql = new StringBuilder("select user.* from regis_event re join user on re.user_id = user.id where event_id = :id");
+        StringBuilder sql = new StringBuilder("select * from d_list_user_regis where event_id = :id");
 
         Query query = entityManager.createNativeQuery(sql.toString());
         query.setParameter("id", id);
@@ -254,17 +274,18 @@ public class RegisEventServiceImpl implements RigisEventService{
         List<Map<String, Object>> results = query.unwrap(NativeQuery.class)
                 .setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE)
                 .getResultList();
-        List<User> data = new ArrayList<>();
+        List<UserResponseDto> data = new ArrayList<>();
         try{
             results.forEach((rs) -> {
-                User u = new User();
-                u.setId(ParseHelper.INT.parse(rs.get("id")));
-                u.setUsername(ParseHelper.STRING.parse(rs.get("username")));
-                u.setEmail(ParseHelper.STRING.parse(rs.get("email")));
+                UserResponseDto u = UserResponseDto.builder()
+                        .id(ParseHelper.INT.parse(rs.get("id")))
+                        .username(ParseHelper.STRING.parse(rs.get("username")))
+                        .email(ParseHelper.STRING.parse(rs.get("email")))
+                        .build();
                 data.add(u);
             });
 
-            return data.stream().map(userMapper::toUserResponseDto).toList();
+            return data;
         }catch (Exception e){
             e.printStackTrace();
         }
