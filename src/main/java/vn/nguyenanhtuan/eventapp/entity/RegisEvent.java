@@ -27,4 +27,5 @@ public class RegisEvent {
     int user_id;
     int event_id;
     String status;
+    int guest_id;
 }

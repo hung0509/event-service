@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.nguyenanhtuan.eventapp.dto.ApiResponse;
 import vn.nguyenanhtuan.eventapp.dto.request.EventReqDto;
 import vn.nguyenanhtuan.eventapp.dto.request.RegisEventReqDto;
+import vn.nguyenanhtuan.eventapp.dto.response.DashBoardDto;
 import vn.nguyenanhtuan.eventapp.dto.response.EventResDto;
 import vn.nguyenanhtuan.eventapp.service.EventService;
 
@@ -65,6 +66,15 @@ public class EventController {
         return ApiResponse.<EventResDto>builder()
                 .result(eventService.save(req))
                 .message("Save event Successfully!")
+                .build();
+    }
+
+    @GetMapping("/dashboard")
+    public ApiResponse<DashBoardDto> getDashBoard() {
+        log.info("*Log table event. get event by id in db*");
+        return ApiResponse.<DashBoardDto>builder()
+                .result(eventService.getDashBoard())
+                .message("get event by id Successfully!")
                 .build();
     }
 }

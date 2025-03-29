@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +20,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.nguyenanhtuan.eventapp.constant.ErrorCode;
+import vn.nguyenanhtuan.eventapp.constant.ParseHelper;
 import vn.nguyenanhtuan.eventapp.constant.Status;
 import vn.nguyenanhtuan.eventapp.dto.request.EventReqDto;
 import vn.nguyenanhtuan.eventapp.dto.request.RegisEventReqDto;
+import vn.nguyenanhtuan.eventapp.dto.response.DashBoardDto;
 import vn.nguyenanhtuan.eventapp.dto.response.EventResDto;
+import vn.nguyenanhtuan.eventapp.dto.response.UserResponseDto;
 import vn.nguyenanhtuan.eventapp.entity.Category;
 import vn.nguyenanhtuan.eventapp.entity.Event;
 import vn.nguyenanhtuan.eventapp.handle.GlobalException;
@@ -38,9 +43,7 @@ import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -154,6 +157,28 @@ public class EventServiceImpl implements EventService {
         return eventMapper.toEventResDto(event);
     }
 
+    @Override
+    public DashBoardDto getDashBoard() {
+        StringBuilder sql = new StringBuilder("select * from d_dashboard_v");
+
+        Query query = entityManager.createNativeQuery(sql.toString());
+
+        List<Map<String, Object>> results = query.unwrap(NativeQuery.class)
+                .setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE)
+                .getResultList();
+        try{
+            Map<String, Object> data = results.get(0);
+            return DashBoardDto.builder()
+                        .countEvent(ParseHelper.INT.parse(data.get("event_count")))
+                        .countAttention(ParseHelper.INT.parse(data.get("user_count")))
+                        .countFaculty(ParseHelper.INT.parse(data.get("associate_count")))
+                        .build();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private String uploadImage(MultipartFile file) throws IOException {
         String contentType = file.getContentType();
         InputStream inputStream = file.getInputStream();
@@ -178,6 +203,8 @@ public class EventServiceImpl implements EventService {
         URL url = amazonS3.getUrl(AWS_BUCKET, keyName);
         return url.toString();
     }
+
+
 
 
     private Date convertStringtoDate(String dateInit){

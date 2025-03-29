@@ -3,6 +3,7 @@ package vn.nguyenanhtuan.eventapp.service.impl;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import jakarta.mail.internet.MimeMessage;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -152,12 +154,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto registerFaculty(UserRequestDto req) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(req.getEmail());
-        message.setSubject("Đăng ký tổ chức mơ");
-        message.setText("Email: " + req.getEmail() + "/n Password: abc@123");
-        message.setFrom("no-reply@gmail.com");
-        mailSender.send(message);
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setTo(req.getEmail());
+            helper.setFrom("no-reply@gmail.com"); // Gmail có thể vẫn thay đổi nếu tài khoản SMTP không đúng
+            helper.setSubject("Đăng ký tổ chức mới");
+            helper.setText("Email: " + req.getEmail() + "\nPassword: abc@123", false);
+            mailSender.send(mimeMessage);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         Role role = roleRepository.findById(2).orElseThrow(() -> new GlobalException(ErrorCode.ROLE_NOT_EXIST));
 
@@ -181,12 +189,19 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(password));
             userRepository.save(user);
 
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(email);
-            message.setSubject("Thiết lập lại mật khẩu" );
-            message.setText("Password mới là:" +  password);
-            message.setFrom("no-reply@gmail.com");
-            mailSender.send(message);
+            try {
+                MimeMessage mimeMessage = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+                helper.setTo(email);
+                helper.setFrom("no-reply@gmail.com");
+                helper.setSubject("Thiết lập lại mật khẩu");
+                helper.setText("Password mới là: " + password, false);
+
+                mailSender.send(mimeMessage);
+            } catch (Exception e) {
+                e.printStackTrace(); // Xử lý lỗi nếu có
+            }
         }else{
             throw new GlobalException(ErrorCode.USER_NOT_EXIST);
         }
